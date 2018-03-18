@@ -3,6 +3,14 @@ Library for easy parallel processing of python code.
 
 Allows you to easily run the your python code on multiple cores of your machine.
 
+## Installation
+
+pip install pybatch
+
+or Download from
+
+https://pypi.python.org/pypi/pybatch/0.1
+
 ## Usage
 
 * Import the necessary files
