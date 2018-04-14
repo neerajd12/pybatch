@@ -1,5 +1,5 @@
 import unittest
-from pybatch.data_proxy import ListDataProxy
+from data_proxy import ListDataProxy
 
 
 class TestListDataProxy(unittest.TestCase):

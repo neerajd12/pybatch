@@ -1,9 +1,9 @@
 import unittest
 from multiprocessing import Queue
-from pybatch.executor import QueuedJobExecutor, DEFAULT_PARTITION_KEY
-from pybatch.partitioner import SimpleListPartitioner
-from pybatch.result import ListResultManager, JobSuccess, JobError
-from pybatch.data_proxy import ListDataProxy
+from executor import QueuedJobExecutor, DEFAULT_PARTITION_KEY
+from partitioner import SimpleListPartitioner
+from result import ListResultManager, JobSuccess, JobError
+from data_proxy import ListDataProxy
 
 
 def test_worker(*args, **kwargs):

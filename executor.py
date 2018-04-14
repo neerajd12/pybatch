@@ -184,6 +184,15 @@ class ExecutorCommType(object):
     pipe = 'pipe'
 
 
+class ExecutorFactory(object):
+
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def executor(self):
+        raise NotImplementedError("Need an executor function that returns an instance of JobExecutor.")
+
+
 class Parallelize(object):
     """
     Decorator for parallel execution of a function.
@@ -192,14 +201,17 @@ class Parallelize(object):
                  result_manager=None):
         """
 
-        :param executor_factory: A function that returns the instance of JobExecutor.
+        :param executor_factory: An instance of ExecutorFactory or a function that returns the instance of JobExecutor.
         :param executor_type: ExecutorCommType. Used only if executor_factory is None.
         :param data_partitioner: Instance of @partitioner.DataPartitioner.
         :param result_manager: Instance of @result.ResultManager.
         """
         if executor_factory is not None:
-            self.executor = executor_factory()
-            assert isinstance(self.executor, JobExecutor), "executor_factory "
+            if isinstance(executor_factory, ExecutorFactory):
+                self.executor = executor_factory.executor()
+            else:
+                self.executor = executor_factory()
+            assert isinstance(self.executor, JobExecutor), "executor_factory must return an instance of JobExecutor"
         else:
             if executor_type == ExecutorCommType.queue:
                 self.executor = QueuedJobExecutor(worker=None, data_partitioner=data_partitioner,
@@ -211,31 +223,3 @@ class Parallelize(object):
     def __call__(self, f):
         self.executor.worker = f
         return self.executor.execute
-
-
-# if __name__ == "__main__":
-#
-#     class ListDataProxy(DataProxy):
-#
-#         def __init__(self):
-#             super(ListDataProxy, self).__init__([i for i in range(100)])
-#             self.data_size = len(self.data)
-#
-#         def get_data_size(self):
-#             return self.data_size
-#
-#         def get_partition(self, *args, **kwargs):
-#             # partiton_indexes = kwargs[DEFAULT_PARTITION_KEY]
-#             return args, kwargs  # self.data[partiton_indexes[0]:partiton_indexes[1]]
-#
-#     Data = ListDataProxy()
-#
-#
-#     @Parallelize(data_partitioner=SimpleIndexPartitioner(data_proxy=Data, processors=1),
-#                  result_manager=ListResultManager())
-#     def test_worker(*args, **kwargs):
-#         return Data.get_partition(*args, **kwargs)
-#
-#
-#     response = test_worker(1, 2)
-#     print(response.show_results()[0].__dict__)

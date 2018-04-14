@@ -1,28 +1,28 @@
 import unittest
 from mock import patch
-from pybatch.result import ListResultManager, JobSuccess, JobError
+from result import ListResultManager, JobSuccess, JobError
 
 
 class TestListResultManager(unittest.TestCase):
 
-    @patch('pybatch.result.ListResultManager.add_error')
-    @patch('pybatch.result.ListResultManager.add_success')
+    @patch('result.ListResultManager.add_error')
+    @patch('result.ListResultManager.add_success')
     def test_add_results_success(self, add_success, add_error):
         result_manager = ListResultManager()
         result_manager.add_results(JobSuccess(1, 1))
         self.assertTrue(add_success.called)
         self.assertFalse(add_error.called)
 
-    @patch('pybatch.result.ListResultManager.add_error')
-    @patch('pybatch.result.ListResultManager.add_success')
+    @patch('result.ListResultManager.add_error')
+    @patch('result.ListResultManager.add_success')
     def test_add_results_error(self, add_success, add_error):
         result_manager = ListResultManager()
         result_manager.add_results(JobError(1, 1))
         self.assertTrue(add_error.called)
         self.assertFalse(add_success.called)
 
-    @patch('pybatch.result.ListResultManager.add_error')
-    @patch('pybatch.result.ListResultManager.add_success')
+    @patch('result.ListResultManager.add_error')
+    @patch('result.ListResultManager.add_success')
     def test_add_results_invalid_result_type(self, add_success, add_error):
         result_manager = ListResultManager()
         with self.assertRaises(TypeError) as e:

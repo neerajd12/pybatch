@@ -1,6 +1,6 @@
 import unittest
-from pybatch.data_proxy import ListDataProxy
-from pybatch.partitioner import SimpleIndexPartitioner
+from data_proxy import ListDataProxy
+from partitioner import SimpleIndexPartitioner
 
 
 class TestSimpleIndexPartitioner(unittest.TestCase):
